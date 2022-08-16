@@ -15,38 +15,37 @@ import "./index.css";
 
 // ARROW FUNCTION
 class Square extends React.Component {
-    /* In the constructor body of a derived class (with extends), the super keyword may appear 
-    as a "function call" (super(...args)), which must be called before the this keyword is used, 
-    and before the constructor returns. It calls the parent class's constructor and binds the 
-    parent class's public fields, after which the derived class's constructor 
-    can further access and modify this.*/
-    constructor(props) {
-        super(props);
-        this.state = {
-          value: null,
-        };
-      }
-
-    /*By calling this.setState from an onClick handler in the Square’s render method, we tell 
-    React to re-render that Square whenever its <button> is clicked. After the update, the Square’s 
-    this.state.value will be 'X', so we’ll see the X on the game board. If you click on any Square, 
-    an X should show up.When you call setState in a component, React automatically updates the 
-    child components inside of it too.*/
-    render() {
-      return (
-        <button 
-          className="square" 
-          onClick={() => this.setState({value: 'X'})}
-        >
-          {this.state.value}
-        </button>
-      );
-    }
-   }
+  render() {
+    return (
+      <button className="square" onClick={() => this.props.onClick()}>
+        {this.props.value}
+      </button>
+    );
+  }
+}
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+    };
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+
   renderSquare(i) {
-    return <Square value={i} />;
+    console.log(this.state.squares);
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    );
   }
 
   render() {
